@@ -1,32 +1,58 @@
 <template>
-  <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view/>
+  <div id="app" :class="{'isnight':!$root.isDay}">
+    <TopNav v-if="$root.isShowNav" class="nav"></TopNav>
+    <router-view
+      :class="`${$root.isShowNav ? 'views' : 'showviews'} ${
+        $root.isShowAudio ? 'showAudio' : ''} ${!$root.isDay ?'isnight':''} ${!$root.isDay ? 'isnightfont' : ''}`"
+    />
+    <PlayView v-if="$root.musicStore.musicID"></PlayView>
+    <div v-if="$root.musicStore.musicID" class="fakerAudio"></div>
   </div>
 </template>
-
-<style>
+<script>
+import TopNav from "@/components/TopNav";
+import PlayView from "@/components/Playmusic";
+export default {
+  name: "APP",
+  created() {},
+  components: {
+    TopNav,
+    PlayView,
+  },
+};
+</script>
+<style lang='less'>
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
+  width: 100%;
+  height: 100vh;
+  .nav {
+    position: fixed;
+    top: 0px;
+  }
+  .views {
+    position: fixed;
+    width: 100vw;
+    top: 22vh;
+    height: 78vh;
+    overflow-x: hidden;
+    overflow-y: auto;
 
-#nav {
-  padding: 30px;
-}
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+  .showviews {
+    width: 100vw;
+    height: 100vh;
+    overflow-y: auto;
+    overflow-x: hidden;
 
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-#nav a.router-link-exact-active {
-  color: #42b983;
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+  .showAudio {
+    padding-bottom: 60px;
+  }
 }
 </style>
